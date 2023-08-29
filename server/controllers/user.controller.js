@@ -249,22 +249,21 @@ exports.deleteOne = async (request, response) => {
 exports.findCart = async (request, response) => {
     try {
         const userID = request.params.userID;
-        const users = await UserModel.findbyPk(userID, {
-            attributes: [[col('Cart.CartDetail'), 'carts']],
+        const foundUserCart = await UserModel.findByPk(userID, {
+            attributes: ['firstName', 'lastName', 'email', 'address', 'phone'],
             include: [
                 {
                     model: CartModel,
-                    attributes: [],
-                    include: [
-                        {
-                            model: CartDetailModel,
-                            attributes: [],
-                        },
-                    ],
+                    attributes: ['cartID'],
+                    include: {
+                        model: CartDetailModel,
+                        attributes: ['quantity'],
+                    },
                 },
             ],
         });
-        if (!users.length) {
+
+        if (!foundUserCart) {
             return sendResponse(
                 response,
                 StatusCodes.NO_CONTENT,
@@ -275,14 +274,15 @@ exports.findCart = async (request, response) => {
         sendResponse(
             response,
             StatusCodes.OK,
-            generateMessage.findAll.success(modelName, users.length),
-            users
+            generateMessage.findAll.success(modelName, foundUserCart.length),
+            foundUserCart
         );
     } catch (error) {
         if (error instanceof ValidationError) {
             // handle validation error
         }
 
+        console.log(error);
         sendResponse(
             response,
             StatusCodes.INTERNAL_SERVER_ERROR,

@@ -16,8 +16,8 @@ const modelName = getModelName(__filename);
 // Fetch all categories
 exports.findAll = async (request, response) => {
     try {
-        const categories = await CategoryModel.findAll();
-        
+        const categories = await CategoryModel.findAll({ attributes: ['categoryID', 'name'] });
+
         // If there are no categories, send NO_CONTENT status code
         if (!categories.length) {
             return sendResponse(
@@ -55,7 +55,7 @@ exports.findByPk = async (request, response) => {
     try {
         const categoryID = request.params.categoryID;
         const dbCategoryData = await CategoryModel.findByPk(categoryID);
-        
+
         // If category not found, send BAD_REQUEST status code
         if (!dbCategoryData) {
             return sendResponse(
@@ -64,7 +64,7 @@ exports.findByPk = async (request, response) => {
                 generateMessage.findByPk.missingID(modelName, categoryID)
             );
         }
-        
+
         // Send fetched category data with OK status code
         sendResponse(
             response,
@@ -92,7 +92,7 @@ exports.findByPk = async (request, response) => {
 exports.createOne = async (request, response) => {
     // Validate the request data
     const errors = validationResult(request);
-    
+
     // If validation errors exist, send BAD_REQUEST status code
     if (!errors.isEmpty()) {
         return sendResponse(
@@ -107,7 +107,7 @@ exports.createOne = async (request, response) => {
     try {
         const rawCategoryData = request.body;
         const dbCategoryData = await CategoryModel.create(rawCategoryData);
-        
+
         // Send created category data with OK status code
         sendResponse(
             response,
@@ -135,7 +135,7 @@ exports.createOne = async (request, response) => {
 exports.updateOne = async (request, response) => {
     // Validate the request data
     const errors = validationResult(request);
-    
+
     // If validation errors exist, send BAD_REQUEST status code
     if (!errors.isEmpty()) {
         return sendResponse(
@@ -192,7 +192,7 @@ exports.deleteOne = async (request, response) => {
 
         // Delete the category
         const deletedRows = await CategoryModel.destroy({ where: { categoryID } });
-        
+
         // If no rows deleted, send BAD_REQUEST status code
         if (!deletedRows) {
             return sendResponse(
@@ -201,7 +201,7 @@ exports.deleteOne = async (request, response) => {
                 generateMessage.deleteOne.missingID(modelName)
             );
         }
-        
+
         // Send deleted rows count with OK status code
         sendResponse(response, StatusCodes.OK, generateMessage.deleteOne.success(modelName), {
             deletedRows,

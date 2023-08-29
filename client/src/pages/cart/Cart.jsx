@@ -4,9 +4,19 @@ import { CheckIcon, MinusIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/o
 import { Link } from 'react-router-dom';
 import { BreadCrumb } from '../../components/ui';
 import { useGetCartQuery } from '../../features/user/userSlice';
+import { useSelector } from 'react-redux';
+import { selectAccessToken } from '../../features/auth/authSlice';
+import jwtDecode from 'jwt-decode';
 
 const Cart = () => {
-    const { data: cart, isLoading, isSuccess, isError, error } = useGetCartQuery();
+    // const token = useSelector(selectAccessToken);
+    // const userInfo = jwtDecode(token);
+    // const { data: carts, isLoading, isSuccess, isError, error } = useGetCartQuery(userInfo?.userID);
+
+    // let content;
+    // if (isLoading) {
+    //     content = 
+    // }
     return (
         <main>
             <section className="container mx-auto px-4 py-8">

@@ -26,7 +26,7 @@ const BreadCrumb = ({ children }) => {
     );
 };
 
-const BreadCrumbItem = ({ to, children, isDisabled, ...props }) => {
+const BreadCrumbItem = ({ to, children, isDisabled, className, ...props }) => {
     const location = useLocation();
     const isActive =
         `${location.pathname}${location.search}` === to
@@ -44,7 +44,7 @@ const BreadCrumbItem = ({ to, children, isDisabled, ...props }) => {
                 </span>
             ) : (
                 <Link
-                    className={`cursor-pointer font-semibold transition duration-150 ease-in-out ${isActive} [ ] focus:text-accent-600 active:text-accent-700`}
+                    className={`cursor-pointer font-semibold transition duration-150 ease-in-out ${isActive} focus:text-accent-600 active:text-accent-700 ${className}`}
                     to={to}
                     {...props}
                 >

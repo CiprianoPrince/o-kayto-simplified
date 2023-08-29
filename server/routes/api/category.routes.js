@@ -7,10 +7,14 @@ module.exports = (app) => {
     const router = require('express').Router();
 
     // Retrieve all category.
-    router.get('/', verifyRoles(ROLELIST.Admin, ROLELIST.User), controller.findAll);
+    router.get('/', verifyRoles(ROLELIST.Admin, ROLELIST.User, ROLELIST.Guest), controller.findAll);
 
     //  Retrieve details of a specific category.
-    router.get('/:categoryID', verifyRoles(ROLELIST.Admin, ROLELIST.User), controller.findByPk);
+    router.get(
+        '/:categoryID',
+        verifyRoles(ROLELIST.Admin, ROLELIST.User, ROLELIST.Guest),
+        controller.findByPk
+    );
 
     // Add a new category.
     router.post(
@@ -24,13 +28,14 @@ module.exports = (app) => {
     //  Update a category's details.
     router.put(
         '/:categoryID',
+        verifyRoles(ROLELIST.Admin),
         validator.validateName,
         validator.validateDescription,
         controller.updateOne
     );
 
     //  Delete a category.
-    router.delete('/:categoryID', controller.deleteOne);
+    router.delete('/:categoryID', verifyRoles(ROLELIST.Admin), controller.deleteOne);
 
     app.use('/api/categories', router);
 };

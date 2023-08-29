@@ -32,12 +32,12 @@ app.use(credentials);
 // Cross Origin Resource Sharing
 app.use(cors(corsOptions));
 
-// app.use(
-//     rateLimit({
-//         windowMs: 15 * 60 * 1000, // 15 minutes
-//         max: 100,
-//     })
-// );
+app.use(
+    rateLimit({
+        windowMs: 15 * 60 * 1000, // 15 minutes
+        max: 100,
+    })
+);
 app.use(helmet());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());

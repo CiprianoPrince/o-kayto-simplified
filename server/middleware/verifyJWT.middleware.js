@@ -14,11 +14,10 @@ module.exports = (request, response, next) => {
         if (err) {
             return response.sendStatus(403); // Forbidden due to invalid token
         }
-        
+
         // Assign user information to the request object
         request.userID = decoded.userInfo.userID;
         request.role = decoded.userInfo.role;
-        
         next(); // Proceed to the next middleware or route handler
     });
 };

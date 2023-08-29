@@ -1,6 +1,7 @@
 import { BreadCrumb } from '../../../components/ui';
 import ProductVariant from './ProductVariant';
 import { useGetProductByIdQuery } from '../../../features/products/productSlice';
+import { useGetCategoryByIdQuery } from '../../../features/category/categorySlice';
 
 const SingleProduct = ({ categoryParam, productParam }) => {
     const {
@@ -10,6 +11,23 @@ const SingleProduct = ({ categoryParam, productParam }) => {
         isError,
         error,
     } = useGetProductByIdQuery(productParam);
+
+    const {
+        data: category,
+        isLoading: isLoadingCategory,
+        isSuccessCategory,
+        isErrorCategory,
+        errorCategory,
+    } = useGetCategoryByIdQuery(categoryParam);
+
+    let categoryName;
+    if (isLoadingCategory) {
+        categoryName = 'Loading...';
+    } else if (isSuccessCategory) {
+        categoryName = category?.name;
+    } else if (isErrorCategory) {
+        categoryName = errorCategory;
+    }
 
     let content;
     if (isLoading) {
@@ -29,14 +47,15 @@ const SingleProduct = ({ categoryParam, productParam }) => {
                         <BreadCrumb.Item to="/shop">Shop</BreadCrumb.Item>
                         {categoryParam ? (
                             <BreadCrumb.Item to={`/shop?category=${categoryParam}`}>
-                                {categoryParam.toUpperCaseFirst()}
+                                {category?.name?.toUpperCaseFirst()}
                             </BreadCrumb.Item>
                         ) : null}
                         {productParam ? (
                             <BreadCrumb.Item
                                 to={`/shop?category=${categoryParam}&product=${productParam}`}
+                                className="line-clamp-1"
                             >
-                                {productParam.toUpperCaseFirst()}
+                                {product?.name?.toUpperCaseFirst()}
                             </BreadCrumb.Item>
                         ) : null}
                     </BreadCrumb>

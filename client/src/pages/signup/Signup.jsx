@@ -147,7 +147,6 @@ const Signup = () => {
                                 {...register('email')}
                                 id="email"
                                 placeholder="Your email address"
-                                value="exampleuser@gmail.com"
                             />
                             <span className="text-xs text-rose-600">{errors?.email?.message}</span>
                         </div>
